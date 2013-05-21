@@ -11,7 +11,7 @@
         <meta name="viewport" content="width=device-width">
         
         <style>
-        	body{background-color:#ecf0f1;font-size:16px;}
+        	body{background-color:#ecf0f1;font-size:16px;font-family:helvetica, arial, sans-serif}
         	.content{margin:30px auto; width:320px;text-align:center;box-shadow: 0px 0px 250px 250px rgba(255, 255, 255, 1);background-color:#fff}
         	.content h1{z-index:1;}
         	.content input {border:1px solid #ccc;font-size:16px;padding:8px 6px;}
@@ -36,7 +36,7 @@
 		<script>
 		$(document).ready(function() {
 		  $('.search-box').sayt({
-		    src: 'sayt-json.json',
+		    src: 'http://127.0.0.1/sayt-json.php',
 		    timeoutLength:150
 		  });
 		});

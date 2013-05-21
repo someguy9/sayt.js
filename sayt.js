@@ -16,6 +16,8 @@
 		var defaults = {
 			inputId: '%-sayt',
 			classPrefix: 'sayt-',
+			noResultsText: 'No results.',
+			inputWidth: $(this).outerWidth()-2,
 			minChars: 2
 		};
 		
@@ -62,7 +64,49 @@
 						requestCount: ++requestCount,
 					    success: function(data) {
 							 if (requestCount !== this.requestCount) return;
-								console.log(data);
+							 	
+							 	var output = "";
+							 	
+								var hasData = false;
+								$.each(data, function(i, section) {
+									if (section['data'].length > 0)
+									{
+										hasData = true;
+									}
+								});
+								
+								if(!hasData){
+								
+								
+								
+								}else{
+								 	
+								 	$.each(data, function(i, section) {
+								 		$.each(section['data'], function (ii, item) {
+								 			if(item['title'] != ""){
+									 		
+									 			var link = (item['url'] != "") ? "<a href='" + item['url'] + "'>" : "<a>";
+										 		
+									 			output += "<li>" + link;
+									 			output += item['title'];
+									 			output += "</a></li>";
+								 			
+								 			}
+								 			
+								 		})
+								 	})
+								 	
+								 	boxObj.html(output);
+								
+								 	boxObj.css('width', options.inputWidth);
+								 	boxObj.css('position', 'absolute');
+									boxObj.css('top', input.offset().top+input.outerHeight());
+									boxObj.css('left', input.offset().left);
+										 	
+								 	boxObj.fadeIn(200);
+								 	
+							 	}
+							 	
 								return;
 					    },
 					    error: function(xhr, textStatus, errorThrown) {
@@ -80,6 +124,11 @@
 					
 				}
 			};
+		});
+		
+		
+		input.blur(function() {
+			boxObj.fadeOut(0);
 		});
 		
 		
