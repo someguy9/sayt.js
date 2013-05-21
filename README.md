@@ -6,6 +6,24 @@ sayt.js
 
 Create a Search as you Type field quickly with this jQuery plugin
 
+Usage
+======
+
+$(document).ready(function() {
+  $('.search-box').sayt({
+    src: 'your/json/script',
+    timeoutLength:150
+  });
+});
+
+Hooks
+=====
+
+| Name          | Description   | Example  |
+| ------------- |:-------------:| --------:|
+| -      | - | - |
+
+
 What is sayt.js?
 ================
 
