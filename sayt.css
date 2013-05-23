@@ -1,13 +1,32 @@
 .sayt-box{
 	padding: 0;
 	margin: -1px 0 0 0;
-	border: 1px solid black;
+	border: 1px solid #aaa;
 	border-top: 0;
 	list-style: none;
 	text-align: left;
+	box-shadow: 0 5px 10px #999;
 	z-index: 9999;
 }
 
-.sayt-box li{
+.sayt-box:focus {
+	outline: none;
+	outline-color: transparent;
+	outline-style: none;
+	box-shadow: none
+}
+
+.sayt-box li.hover {
+	background-color: #eee;
+}
+
+.sayt-box li a{
 	min-height: 25px;
+	padding: 10px;
+	display:block;
+}
+
+.sayt-box li img {
+	width: 50px;
+	max-height:50px;
 }

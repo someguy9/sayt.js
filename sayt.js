@@ -18,7 +18,9 @@
 			classPrefix: 'sayt-',
 			noResultsText: 'No results.',
 			inputWidth: $(this).outerWidth()-2,
-			minChars: 2
+			minChars: 2,
+			showHeadings: false,
+			showImages: true
 		};
 		
 		
@@ -67,15 +69,15 @@
 							 	
 							 	var output = "";
 							 	
-								var hasData = false;
+								var resultsExist = false;
 								$.each(data, function(i, section) {
 									if (section['data'].length > 0)
 									{
-										hasData = true;
+										resultsExist = true;
 									}
 								});
 								
-								if(!hasData){
+								if(!resultsExist) {
 								
 								
 								
@@ -87,7 +89,8 @@
 									 		
 									 			var link = (item['url'] != "") ? "<a href='" + item['url'] + "'>" : "<a>";
 										 		
-									 			output += "<li>" + link;
+									 			output += "<li class='"+options.classPrefix+"result'>" + link;
+									 			output += (item['image'] != undefined && options.showImages) ? '<img src="'+item['image']+'" />' : '';
 									 			output += item['title'];
 									 			output += "</a></li>";
 								 			
@@ -104,6 +107,53 @@
 									boxObj.css('left', input.offset().left);
 										 	
 								 	boxObj.fadeIn(200);
+								 	
+								 	
+									/* use keyboard for selecting results */ 
+									var current_index = -1,
+										$number_list = $('.sayt-box'),
+										$options = $number_list.find('.sayt-result'),
+										items_total = $options.length;
+	
+									$options.hover(function() {
+										$options.removeClass('selected');
+										$(this).addClass('hover selected');
+										current_index = $options.index(this);
+									}, function() {
+										$(this).removeClass('hover selected');
+										current_index = -1;
+									});
+										
+									input.bind('keyup', function(e) {
+										if (e.which == 40) {
+											if (current_index + 1 < items_total) {
+												current_index++;
+												change_selection();
+											}
+											input.val(input.val());
+											e.preventDefault();
+										} else if (e.which == 38) {
+											if (current_index > 0) {
+												current_index--;
+												change_selection();
+											}
+											input.val(input.val());
+											e.preventDefault();
+										} else if (e.which == 13) {
+											if(!$options.eq(current_index).hasClass('hover') && current_index > -1){
+											window.location = $options.eq(current_index).find('a').attr("href");
+											e.preventDefault();
+											};
+										}
+									});
+									
+									function change_selection()
+									{
+										$options.removeClass('selected');
+										$options.removeClass('hover');
+										$options.eq(current_index).addClass('selected');
+									}
+								 	
 								 	
 							 	}
 							 	

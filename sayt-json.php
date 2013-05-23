@@ -22,12 +22,12 @@ $data = '[
         },
         "data": [
             {
-                "title": "",
+                "title": "'.$_GET['query'].'",
                 "image": "",
                 "url": ""
             },
             {
-                "title": "",
+                "title": "'.$_GET['query'].'",
                 "image": "",
                 "url": ""
             }
@@ -42,13 +42,13 @@ $data = '[
         "data": [
             {
                 "title": "Lake Artemesia",
-                "image": "",
-                "url": ""
+                "image": "http://snap.ihitthebutton.com/wp-content/uploads/2013/05/National-Cathedral-980x653.jpg",
+                "url": "http://ihitthebutton.com"
             },
             {
-                "title": "",
-                "image": "",
-                "url": ""
+                "title": "Church",
+                "image": "http://snap.ihitthebutton.com/wp-content/uploads/2013/05/National-Cathedral-980x653.jpg",
+                "url": "http://ihitthebutton.com"
             }
         ]
     }
