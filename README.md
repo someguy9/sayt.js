@@ -6,11 +6,13 @@ After seeing Google's search as you type dropdown on ecommerce sites using their
 Usage
 ======
 
+```javascript
 $(document).ready(function() {
   $('.search-box').sayt({
     src: 'path-to-your/json/script'
   });
 });
+```
 
 Hooks
 =====
