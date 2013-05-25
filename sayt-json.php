@@ -10,6 +10,7 @@ $data = '[
         "data": [
             {
                 "title": "Andy Feliciottis Portfolio",
+                "image": "http://static.drawne.com/assets/img/logo1.png",
                 "url": "http://drawne.com"
             }
         ]
@@ -47,6 +48,11 @@ $data = '[
             },
             {
                 "title": "Church",
+                "image": "http://snap.ihitthebutton.com/wp-content/uploads/2013/05/National-Cathedral-980x653.jpg",
+                "url": "http://ihitthebutton.com"
+            },
+            {
+                "title": "House on Hill",
                 "image": "http://snap.ihitthebutton.com/wp-content/uploads/2013/05/National-Cathedral-980x653.jpg",
                 "url": "http://ihitthebutton.com"
             }

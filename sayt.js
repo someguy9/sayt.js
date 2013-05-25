@@ -20,6 +20,7 @@
 			inputWidth: $(this).outerWidth()-2,
 			minChars: 2,
 			showHeadings: false,
+			showDescription: true,
 			showImages: true
 		};
 		
@@ -30,7 +31,7 @@
 		options.inputId = options.inputId.replace('%', $(this).attr('id'));
 		
 		
-		var lastQuery = '';
+		var prevQuery = '';
 		var data;
 		
 		
@@ -54,6 +55,8 @@
 				if(query == "" || query.length < options.minChars){
 					//do nothing if min value isn't met
 				}else{
+					
+					prevQuery = query;
 				
 					currentRequest = $.ajax({
 						url: options.src+"?query="+query+"&callback=?",
@@ -85,14 +88,22 @@
 								 	
 								 	$.each(data, function(i, section) {
 								 		$.each(section['data'], function (ii, item) {
-								 			if(item['title'] != ""){
+								 			if(item['title'] != undefined){
 									 		
-									 			var link = (item['url'] != "") ? "<a href='" + item['url'] + "'>" : "<a>";
+									 			var link = (item['url'] != undefined) ? "<a href='" + item['url'] + "'>" : "<a>";
 										 		
-									 			output += "<li class='"+options.classPrefix+"result'>" + link;
-									 			output += (item['image'] != undefined && options.showImages) ? '<img src="'+item['image']+'" />' : '';
+									 			output += '<li class="'+options.classPrefix+'result">' + link;
+									 			output += '<table border="0" cellspacing="0" cellpadding="0" width="100%"><tr>'
+									 			output += (item['image'] != undefined && options.showImages) ? '<td width="68"><img src="'+item['image']+'" class="preview" /></td>' : '';
+									 			output += '<td>';
+									 			output += '<p class="data">';
+									 			output += '<span class="title">';
 									 			output += item['title'];
-									 			output += "</a></li>";
+									 			output += '</span>';
+									 			output += '</p>';
+									 			output += '</td>';
+									 			output += '</tr></table>';
+									 			output += '</a></li>';
 								 			
 								 			}
 								 			
@@ -176,10 +187,18 @@
 			};
 		});
 		
+		//show last results if input focused again
+		input.focus(function(){
+			if (input.val() == prevQuery && input.val() != '') {
+				boxObj.fadeIn(200);
+			}
+		});
 		
+		//hide search when input if unselected
 		input.blur(function() {
 			boxObj.fadeOut(0);
 		});
+		
 		
 		
 	}

@@ -7,6 +7,7 @@
 	text-align: left;
 	box-shadow: 0 5px 10px #999;
 	z-index: 9999;
+	font-size: 14px;
 }
 
 .sayt-box:focus {
@@ -16,17 +17,36 @@
 	box-shadow: none
 }
 
-.sayt-box li.hover {
+.sayt-box:hover {
+	display: block!important
+}
+
+.sayt-box li.hover, .sayt-box li.selected {
 	background-color: #eee;
 }
 
 .sayt-box li a{
-	min-height: 25px;
 	padding: 10px;
-	display:block;
+	display: block;
+	position: relative;
 }
 
-.sayt-box li img {
-	width: 50px;
-	max-height:50px;
+.sayt-box li {
+	margin: 0;
+	padding: 0;
+	border-bottom:1px solid #c5c5c5
+}
+
+.sayt-box li p.data {
+	margin:0 !important;
+	padding:0 !important;
+}
+
+.sayt-box li p.data .title {
+	font-style: italic
+}
+
+.sayt-box li img.preview {
+	width: 60px;
+	max-height: 60px;
 }
