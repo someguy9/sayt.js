@@ -11,6 +11,7 @@ $data = '[
             {
                 "title": "Andy Feliciottis Portfolio",
                 "image": "http://static.drawne.com/assets/img/logo1.png",
+                "description": "See more work by Andy",
                 "url": "http://drawne.com"
             }
         ]
@@ -23,14 +24,11 @@ $data = '[
         },
         "data": [
             {
-                "title": "'.$_GET['query'].'",
-                "image": "",
-                "url": ""
+                "title": "Google Search for '.$_GET['query'].'",
+                "url": "https://www.google.com/#q='.$_GET['query'].'&fp=1"
             },
             {
-                "title": "'.$_GET['query'].'",
-                "image": "",
-                "url": ""
+                "title": "'.$_GET['query'].'"
             }
         ]
     },

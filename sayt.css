@@ -21,32 +21,36 @@
 	display: block!important
 }
 
-.sayt-box li.hover, .sayt-box li.selected {
+.sayt-box .sayt-result.hover, .sayt-box .sayt-result.selected {
 	background-color: #eee;
 }
 
-.sayt-box li a{
+.sayt-box .sayt-result a{
 	padding: 10px;
 	display: block;
 	position: relative;
 }
 
-.sayt-box li {
+.sayt-box .sayt-result {
 	margin: 0;
 	padding: 0;
 	border-bottom:1px solid #c5c5c5
 }
 
-.sayt-box li p.data {
+.sayt-box .sayt-result tr {
+	vertical-align: top;
+}
+
+.sayt-box .sayt-result p.data {
 	margin:0 !important;
 	padding:0 !important;
 }
 
-.sayt-box li p.data .title {
+.sayt-box .sayt-result p.data .title {
 	font-style: italic
 }
 
-.sayt-box li img.preview {
+.sayt-box .sayt-result img.preview {
 	width: 60px;
 	max-height: 60px;
 }

@@ -21,7 +21,8 @@
 			minChars: 2,
 			showHeadings: false,
 			showDescription: true,
-			showImages: true
+			showImages: true,
+			seeAllLink: false
 		};
 		
 		
@@ -57,6 +58,9 @@
 				}else{
 					
 					prevQuery = query;
+					
+					//Loading animation, great for adding a whirlywiggy
+					input.addClass(options.classPrefix+'thinking');
 				
 					currentRequest = $.ajax({
 						url: options.src+"?query="+query+"&callback=?",
@@ -88,8 +92,6 @@
 								 	
 								 	$.each(data, function(i, section) {
 								 		$.each(section['data'], function (ii, item) {
-								 			if(item['title'] != undefined){
-									 		
 									 			var link = (item['url'] != undefined) ? "<a href='" + item['url'] + "'>" : "<a>";
 										 		
 									 			output += '<li class="'+options.classPrefix+'result">' + link;
@@ -97,18 +99,31 @@
 									 			output += (item['image'] != undefined && options.showImages) ? '<td width="68"><img src="'+item['image']+'" class="preview" /></td>' : '';
 									 			output += '<td>';
 									 			output += '<p class="data">';
-									 			output += '<span class="title">';
-									 			output += item['title'];
-									 			output += '</span>';
+									 			output += (item['title'] != undefined) ? '<span class="title">' + item['title'] + '</span><br />\n' : '';
+									 			output += (item['description'] != undefined) ? '<span class="description">' + item['description'] + '</span>' : '';
 									 			output += '</p>';
 									 			output += '</td>';
 									 			output += '</tr></table>';
 									 			output += '</a></li>';
 								 			
-								 			}
-								 			
 								 		})
 								 	})
+								 	
+								 	//See all link, basically just submits to the form #sticks&stones
+								 	if(options.seeAllLink) {
+									 	
+												output += '<li class="'+options.classPrefix+'result"><a href="javascript:void(0);" onclick="$(this).closest(\'form\').submit();">';
+												output += '<table border="0" cellspacing="0" cellpadding="0" width="100%"><tr>';
+												output += '<td>';
+												output += '<p class="data">';
+												output += '<span class="title">See All Results...</span><br />\n';
+												output += '</p>'+"\n";
+												output += '</td>';
+												output += '</tr></table>';
+												output += '</a></li>'+"\n";
+									 	
+								 	}
+								 	
 								 	
 								 	boxObj.html(output);
 								
@@ -116,6 +131,9 @@
 								 	boxObj.css('position', 'absolute');
 									boxObj.css('top', input.offset().top+input.outerHeight());
 									boxObj.css('left', input.offset().left);
+									
+									//remove thinking class
+									input.removeClass(options.classPrefix+'thinking');
 										 	
 								 	boxObj.fadeIn(200);
 								 	
