@@ -55,6 +55,7 @@
 				var query = input.val();
 				if(query == "" || query.length < options.minChars){
 					//do nothing if min value isn't met
+					boxObj.fadeOut(200);
 				}else{
 					
 					prevQuery = query;
