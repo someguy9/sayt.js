@@ -20,3 +20,4 @@ Hooks
 | Name          | Description   | Example  |
 | ------------- | ------------- | -------- |
 | src      | URL of your json script, make sure to view the example sayt-json.php for formatting your json | mysite.com/json-search.php |
+| showSectionHeadings      | Displays the title of sections, great if you have multiple categories | true |
