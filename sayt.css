@@ -8,6 +8,7 @@
 	box-shadow: 0 5px 10px #999;
 	z-index: 9999;
 	font-size: 14px;
+	background-color: #fff;
 }
 
 .sayt-box:focus {
@@ -22,7 +23,7 @@
 }
 
 .sayt-box .sayt-result.hover, .sayt-box .sayt-result.selected {
-	background-color: #ecf0f1;
+	background-color: #ecf0f1!important;
 }
 
 .sayt-box .sayt-result a {
