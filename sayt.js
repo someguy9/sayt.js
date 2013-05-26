@@ -19,7 +19,7 @@
 			noResultsText: 'No results.',
 			inputWidth: $(this).outerWidth()-2,
 			minChars: 2,
-			showHeadings: false,
+			showSectionHeadings: false,
 			showDescription: true,
 			showImages: true,
 			seeAllLink: false
@@ -92,21 +92,37 @@
 								}else{
 								 	
 								 	$.each(data, function(i, section) {
+								 	
+								 		var limit = section['section']['limit'];
+								 		var i = 0;
+								 		
+								 		if (options.showSectionHeadings && section['section']['title'] != undefined) {
+								 			output += '<li class="'+options.classPrefix+'heading">';
+								 			output += section['section']['title'];
+								 			output += '</li>';
+								 		}
+								 	
 								 		$.each(section['data'], function (ii, item) {
-									 			var link = (item['url'] != undefined) ? "<a href='" + item['url'] + "'>" : "<a>";
-										 		
-									 			output += '<li class="'+options.classPrefix+'result">' + link;
-									 			output += '<table border="0" cellspacing="0" cellpadding="0" width="100%"><tr>'
-									 			output += (item['image'] != undefined && options.showImages) ? '<td width="68"><img src="'+item['image']+'" class="preview" /></td>' : '';
-									 			output += '<td>';
-									 			output += '<p class="data">';
-									 			output += (item['title'] != undefined) ? '<span class="title">' + item['title'] + '</span><br />\n' : '';
-									 			output += (item['description'] != undefined) ? '<span class="description">' + item['description'] + '</span>' : '';
-									 			output += '</p>';
-									 			output += '</td>';
-									 			output += '</tr></table>';
-									 			output += '</a></li>';
-								 			
+								 		
+								 				if (i < limit) {
+								 		
+										 			var link = (item['url'] != undefined) ? "<a href='" + item['url'] + "'>" : "<a>";
+											 		
+										 			output += '<li class="'+options.classPrefix+'result">' + link;
+										 			output += '<table border="0" cellspacing="0" cellpadding="0" width="100%"><tr>'
+										 			output += (item['image'] != undefined && options.showImages) ? '<td width="68"><img src="'+item['image']+'" class="preview" /></td>' : '';
+										 			output += '<td>';
+										 			output += '<p class="data">';
+										 			output += (item['title'] != undefined) ? '<span class="title">' + item['title'] + '</span><br />\n' : '';
+										 			output += (item['description'] != undefined) ? '<span class="description">' + item['description'] + '</span>' : '';
+										 			output += '</p>';
+										 			output += '</td>';
+										 			output += '</tr></table>';
+										 			output += '</a></li>';
+									 			
+									 			}
+									 			
+									 			i++;
 								 		})
 								 	})
 								 	
@@ -141,8 +157,8 @@
 								 	
 									/* use keyboard for selecting results */ 
 									var current_index = -1,
-										$number_list = $('.sayt-box'),
-										$options = $number_list.find('.sayt-result'),
+										$number_list = $('.'+options.classPrefix+'box'),
+										$options = $number_list.find('.'+options.classPrefix+'result'),
 										items_total = $options.length;
 	
 									$options.hover(function() {

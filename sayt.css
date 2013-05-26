@@ -22,19 +22,29 @@
 }
 
 .sayt-box .sayt-result.hover, .sayt-box .sayt-result.selected {
-	background-color: #eee;
+	background-color: #ecf0f1;
 }
 
-.sayt-box .sayt-result a{
+.sayt-box .sayt-result a {
+	color: #2c3e50;
+}
+
+.sayt-box .sayt-result a, .sayt-box .sayt-heading{
 	padding: 10px;
 	display: block;
 	position: relative;
 }
 
+.sayt-box .sayt-heading {
+	background-color: #3498db;
+	color: #fff;
+	font-weight: bold;
+}
+
 .sayt-box .sayt-result {
 	margin: 0;
 	padding: 0;
-	border-bottom:1px solid #c5c5c5
+	border-bottom:1px solid #bdc3c7
 }
 
 .sayt-box .sayt-result tr {
@@ -47,7 +57,8 @@
 }
 
 .sayt-box .sayt-result p.data .title {
-	font-style: italic
+	font-style: italic;
+	color: #3498db;
 }
 
 .sayt-box .sayt-result img.preview {
