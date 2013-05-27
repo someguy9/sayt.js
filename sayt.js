@@ -97,6 +97,9 @@
 								 	
 								 	$.each(data, function(i, section) {
 								 	
+								 		var num = section['section']['num'];
+								 		
+								 		if (num != 0){
 								 		var limit = section['section']['limit'];
 								 		var i = 0;
 								 		
@@ -128,6 +131,9 @@
 									 			
 									 			i++;
 								 		})
+								 		
+								 		}
+								 		
 								 	})
 								 	
 								 	//See all link, basically just submits to the form #sticks&stones
