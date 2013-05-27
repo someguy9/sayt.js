@@ -23,13 +23,14 @@
 			seeAllLink: false
 		};
 		
-		//Include default stylesheet
-		if(options.includeCSS) {
-		$('head').append('<link rel="stylesheet" href="sayt.css" type="text/css" />');
-		}
-		
 		
 		var options = $.extend(defaults, options);
+		
+		
+		//Include default stylesheet
+		if(options.includeCSS) {
+			$('head').append('<link rel="stylesheet" href="sayt.css" type="text/css" />');
+		}
 		
 		
 		options.inputId = options.inputId.replace('%', $(this).attr('id'));
@@ -56,7 +57,7 @@
 			if (event.which != 13 && event.which != 9 && event.which != 37 && event.which != 38 && event.which != 39 && event.which != 40){
 			
 				var query = input.val();
-				if(query == "" || query.length < options.minChars){
+				if(query == "" || query.length < options.minChars) {
 					//do nothing if min value isn't met
 					boxObj.fadeOut(200);
 				}else{
