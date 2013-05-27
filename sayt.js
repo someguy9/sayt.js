@@ -8,9 +8,6 @@
  
 (function($) {
 	$.fn.sayt	=	function(options) {
-	
-		//Include default stylesheet, feel free to comment
-		$('head').append('<link rel="stylesheet" href="sayt.css" type="text/css" />');
 		
 		// Define default options
 		var defaults = {
@@ -22,8 +19,14 @@
 			showSectionHeadings: false,
 			showDescription: true,
 			showImages: true,
+			includeCSS: true,
 			seeAllLink: false
 		};
+		
+		//Include default stylesheet
+		if(options.includeCSS) {
+		$('head').append('<link rel="stylesheet" href="sayt.css" type="text/css" />');
+		}
 		
 		
 		var options = $.extend(defaults, options);

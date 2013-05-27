@@ -13,11 +13,21 @@ $(document).ready(function() {
   });
 });
 ```
+This is the most basic code you need, it'll automatically include sayt.css in your page which can be turned off with the includeCSS variable. Be sure to see all of the variables below for more options.
 
 Hooks
 =====
 
 | Name          | Description   | Example  |
 | ------------- | ------------- | -------- |
-| src      | URL of your json script, make sure to view the example sayt-json.php for formatting your json | mysite.com/json-search.php |
+| src      | URL of your json script, make sure to view the example sayt-json.php for formatting your json | "mysite.com/json-search.php" |
+| inputId      | The ID of the search results div that appears, % will be overwritten with the ID of the input | "%-search" |
+| classPrefix      | Overwrites the default classes of elements in the search results div, great for removing the default css | "mysearchresults-" |
+| noResultsText      | Text that shows up when there are no results | "404 No Results Found" |
+| inputWidth      | The width you want your search results div to be, default of this just grabs the width of your input | 400 |
+| minChars      | Amount of characters in your input before a search is triggered | 3 |
 | showSectionHeadings      | Displays the title of sections, great if you have multiple categories | true |
+| showDescription      | If your json includes description tags, you can choose to show them or not  | true |
+| showImages      | If you don't want to show images in your results it can be turned off here  | false |
+| includeCSS      | If you don't want to automatically include the default stylesheet set this to false  | true |
+| seeAllLink      | Add a see all link to the bottom of the search, this link basically just submits your form | true |
