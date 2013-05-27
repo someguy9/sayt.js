@@ -14,12 +14,14 @@ while (list($key, $value) = each($searchresults)) {
 	
 	if($i == 3 ){break;};
 }
+$searchresults2count = 0;
 $searchresults2count = count($searchresults);
+if($searchresults2count == 0){$searchresults2 = array();};
 
 $data = '[
     {
         "section": {
-            "title": "Countries",
+            "title": "Countries (dynamic)",
             "num": "'.$searchresults2count.'",
             "limit": "3"
         },
@@ -27,7 +29,7 @@ $data = '[
     },
     {
         "section": {
-            "title": "Search Engines",
+            "title": "Search Engines (semi dynamic)",
             "num": "3",
             "limit": "3"
         },
@@ -48,7 +50,7 @@ $data = '[
     },
     {
         "section": {
-            "title": "Photos",
+            "title": "Photos (static example)",
             "num": "30",
             "limit": "5"
         },

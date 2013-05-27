@@ -31,3 +31,32 @@ Hooks
 | showImages      | If you don't want to show images in your results it can be turned off here  | false |
 | includeCSS      | If you don't want to automatically include the default stylesheet set this to false  | true |
 | seeAllLink      | Add a see all link to the bottom of the search, this link basically just submits your form | true |
+
+JSON Structure
+
+```json
+    {
+        "section": {
+            "title": "Section Name",
+            "num": "2",
+            "limit": "3"
+        },
+        "data": [
+            {
+                "title": "Go to Google",
+                "url": "https://www.google.com/"
+            },
+            {
+                "title": "Title of the Results",
+                "description": "Text displayed under the title",
+                "image": "url of image to be shown",
+                "url": "url of the page you want this to link to"
+            }
+        ]
+    }
+
+```
+
+num under section is used for the number of results, and the limit is how many you would like to show.
+
+The basics are a repeating set of sections and data as seen above, I do not actually include a php script for searching your data but feel free to use any language for your resulting json.
