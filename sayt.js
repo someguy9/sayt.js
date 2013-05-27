@@ -1,7 +1,5 @@
 /*
  * jQuery Search as you Type plugin
- * Version 0
- * @requires jQuery v1.2.3 or later
  *
  * Website: http://drawne.com
  */
@@ -165,7 +163,7 @@
 								 	boxObj.fadeIn(200);
 								 	
 								 	
-									/* use keyboard for selecting results */ 
+									// use keyboard for selecting results
 									var current_index = -1,
 										$number_list = $('.'+options.classPrefix+'box'),
 										$options = $number_list.find('.'+options.classPrefix+'result'),
@@ -197,6 +195,7 @@
 											e.preventDefault();
 										} else if (e.which == 13) {
 											if(!$options.eq(current_index).hasClass('hover') && current_index > -1){
+											alert($options.eq(current_index).find('a').attr("href"));
 											window.location = $options.eq(current_index).find('a').attr("href");
 											e.preventDefault();
 											};
@@ -243,8 +242,6 @@
 		input.blur(function() {
 			boxObj.fadeOut(0);
 		});
-		
-		
 		
 	}
 })(jQuery);

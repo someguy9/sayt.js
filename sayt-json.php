@@ -36,7 +36,8 @@ $data = '[
         "data": [
             {
                 "title": "Google Search for '.$query.'",
-                "url": "https://www.google.com/#q='.$query.'&fp=1"
+                "url": "https://www.google.com/#q='.$query.'&fp=1",
+                "description": "Open a google search for this term"
             },
             {
                 "title": "Bing Search for '.$query.'",
