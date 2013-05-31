@@ -195,7 +195,6 @@
 											e.preventDefault();
 										} else if (e.which == 13) {
 											if(!$options.eq(current_index).hasClass('hover') && current_index > -1){
-											alert($options.eq(current_index).find('a').attr("href"));
 											window.location = $options.eq(current_index).find('a').attr("href");
 											e.preventDefault();
 											};

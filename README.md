@@ -6,7 +6,7 @@ After seeing Google's search as you type dropdown on ecommerce sites (example lo
 Example
 =======
 
-You can view an example of this script on my site [here](http://drawne.com/demo/sayt.js "sayt.js example").
+You can view an example of this script on my site *[here](http://drawne.com/demo/sayt.js "sayt.js example")*.
 
 Usage
 ======
