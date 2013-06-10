@@ -11,10 +11,11 @@
         <meta name="viewport" content="width=device-width">
         
         <style>
-        	body{background-color:#ecf0f1;font-size:16px;font-family:helvetica, arial, sans-serif}
-        	.content{margin:30px auto; width:450px;text-align:center;box-shadow: 0px 0px 250px 250px rgba(255, 255, 255, 1);background-color:#fff}
-        	.content input {border:1px solid #ccc;font-size:16px;padding:8px 6px;}
-        	.content a {text-decoration: none;}
+        	body{color: #999;text-shadow: 0 1px 0 rgba(0,0,0,.1);background-color:#e6e6e6;font-size:14px;font-family:helvetica, arial, sans-serif}
+        	.content{margin:60px auto; width:450px;text-align:center;}
+        	.content .slogan {margin-top:0;}
+        	.content input {border:0;font-size:16px;padding:14px 16px;-moz-box-shadow: 0 1px 0 rgba(0,0,0,.1);-webkit-box-shadow: 0 1px 0 rgba(0,0,0,.1); /* drop shadow */box-shadow: 0 1px 0 rgba(0,0,0,.1);}
+        	.content a {text-decoration: none;color: #3498db}
         </style>
     </head>
     <body>
@@ -34,17 +35,13 @@
        
     <div class="content">
     	<a href="https://github.com/someguy9/sayt.js" title="sayt.js"><img src="sayt-logo.png" alt="sayt.js" border="0" /></a>
-	    <br />
-	    a jQuery plugin for searching as you type
+	    <p class="slogan">a jQuery plugin for searching as you type</p>
 	    <form action="" method="get">
 			<input class="search-box" name="query" id="example-box" size="48" placeholder="Type a country for example..." />
 		</form>
-		<br />
-		<a href="https://github.com/someguy9/sayt.js" title="sayt.js">Documentation & Download on Github</a>
-		
-		<br /><br />
-		
-		<div class="fb-like" data-href="http://drawne.com/demo/sayt.js/" data-send="false" data-layout="button_count" data-width="450" data-show-faces="true"></div>
+		<p><a href="https://github.com/someguy9/sayt.js" title="sayt.js">Documentation & Download on Github</a></p>
+	
+		<p><div class="fb-like" data-href="http://drawne.com/demo/sayt.js/" data-send="false" data-layout="button_count" data-width="450" data-show-faces="true"></div></p>
     </div>
 
 		<script src="jquery-1.9.1.min.js"></script>
