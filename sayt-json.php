@@ -44,8 +44,8 @@ $data = '[
                 "url": "http://www.bing.com/search?q='.$query.'"
             },
             {
-                "title": "Yahoo Search for '.$query.'",
-                "url": "http://search.yahoo.com/search;_ylt=AjjCFSene_qdvfjfH51XBWebvZx4?p='.$query.'"
+                "title": "Yahoo Search for '.$query.' (onclick example)",
+                "onclick": "alert(\"Why would you want to Yahoo '.$query.'?\")"
             }
         ]
     },

@@ -110,8 +110,23 @@
 								 		$.each(section['data'], function (ii, item) {
 								 		
 								 				if (i < limit) {
-								 		
-										 			var link = (item['url'] != undefined) ? "<a href='" + item['url'] + "'>" : "<a>";
+									 				var haslink = (item['url'] != undefined || item['onclick'] != undefined ) ? true : false;
+									 				
+									 				var link = (haslink == true ) ? "<a " : "";
+									 				if (haslink == true ){
+										 				link = "<a "
+										 				if(item['url'] != undefined){
+										 					link += "href='" + item['url'] + "'"
+										 				}
+										 				if(item['onclick'] != undefined){
+										 					link += "onclick='" + item['onclick'] + "'"
+										 				}
+										 				link += ">"
+									 				
+									 				}
+									 				
+										 			var linkclose = (haslink == true ) ? "</a>" : "";
+										 	
 											 		
 										 			output += '<li class="'+options.classPrefix+'result">' + link;
 										 			output += '<table border="0" cellspacing="0" cellpadding="0" width="100%"><tr>'
@@ -123,7 +138,8 @@
 										 			output += '</p>';
 										 			output += '</td>';
 										 			output += '</tr></table>';
-										 			output += '</a></li>';
+										 			output += linkclose;
+										 			output += '</li>';
 									 			
 									 			}
 									 			
