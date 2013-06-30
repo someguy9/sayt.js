@@ -59,7 +59,8 @@ $data = '[
             {
                 "title": "National Cathedral",
                 "image": "http://pcdn.500px.net/34356968/77a940b681c9610f6ad4c69a90a77c0693ea0fc6/4.jpg",
-                "url": "http://500px.com/photo/34356968"
+                "url": "http://500px.com/photo/34356968",
+                "description": "Here\'s an example of a description, why not include a little more detail? :)"
             },
             {
                 "title": "Storm Clouds over Great Falls",
