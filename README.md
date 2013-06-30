@@ -62,7 +62,8 @@ JSON Structure
         "data": [
             {
                 "title": "Go to Google",
-                "url": "https://www.google.com/"
+                "url": "https://www.google.com/",
+                "onclick": "alert('Javascript!')"
             },
             {
                 "title": "Title of the Results",
