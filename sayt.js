@@ -123,9 +123,11 @@
 										 				}
 										 				link += ">"
 									 				
+									 				}else{
+										 				link = '<div class="no-link">'
 									 				}
 									 				
-										 			var linkclose = (haslink == true ) ? "</a>" : "";
+										 			var linkclose = (haslink == true ) ? "</a>" : "</div>";
 										 	
 											 		
 										 			output += '<li class="'+options.classPrefix+'result">' + link;

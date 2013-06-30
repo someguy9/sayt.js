@@ -30,7 +30,7 @@
 	color: #2c3e50;
 }
 
-.sayt-box .sayt-result a, .sayt-box .sayt-heading{
+.sayt-box .sayt-result a, .sayt-box .sayt-heading, .sayt-box .sayt-result .no-link{
 	padding: 10px;
 	display: block;
 	position: relative;
