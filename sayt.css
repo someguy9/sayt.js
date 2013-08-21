@@ -66,3 +66,11 @@
 	width: 60px;
 	max-height: 60px;
 }
+
+@media (min-width: 768px){
+
+	.sayt-box .sayt-result a, .sayt-box .sayt-heading, .sayt-box .sayt-result .no-link{
+		padding: 15px 10px;
+	}
+
+}

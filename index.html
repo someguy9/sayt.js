@@ -7,27 +7,24 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>sayt.js - jQuery Plugin for Searching as you Type</title>
-        <meta name="description" content="">
+        <meta name="description" content="Demo for sayt.js a jQuery plugin for showing search results as you type.">
         <meta name="viewport" content="width=device-width">
         
         <style>
-        	body{color: #999;text-shadow: 0 1px 0 rgba(0,0,0,.1);background-color:#e6e6e6;font-size:14px;font-family:helvetica, arial, sans-serif}
+        	body{color: #8486A1;text-shadow: 0 1px 0 rgba(0,0,0,.1);background-color:#e6e6e6;font-size:14px;font-family:helvetica, arial, sans-serif;margin: 0;padding: 0;}
         	.content{margin:60px auto; width:450px;text-align:center;}
         	.content .slogan {margin-top:0;}
-        	.content input {border:0;font-size:16px;padding:14px 16px;-moz-box-shadow: 0 1px 0 rgba(0,0,0,.1);-webkit-box-shadow: 0 1px 0 rgba(0,0,0,.1); /* drop shadow */box-shadow: 0 1px 0 rgba(0,0,0,.1);}
+        	.content input {border:0;font-size:16px;padding:14px 16px;-moz-box-shadow: 0 1px 0 rgba(0,0,0,.1);-webkit-box-shadow: 0 1px 0 rgba(0,0,0,.1); /* drop shadow */box-shadow: 0 1px 0 rgba(0,0,0,.1);box-sizing: border-box;}
         	.content a {text-decoration: none;color: #3498db}
+
+        	@media (max-width:451px) {
+        		.content{width: auto;}
+        		.content input {width: 100%;}
+        	}
         </style>
     </head>
     <body>
-    
-		<div id="fb-root"></div>
-		<script>(function(d, s, id) {
-		  var js, fjs = d.getElementsByTagName(s)[0];
-		  if (d.getElementById(id)) return;
-		  js = d.createElement(s); js.id = id;
-		  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=353862264711020";
-		  fjs.parentNode.insertBefore(js, fjs);
-		}(document, 'script', 'facebook-jssdk'));</script>
+
         <!--[if lt IE 7]>
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
@@ -41,7 +38,9 @@
 		</form>
 		<p><a href="https://github.com/someguy9/sayt.js" title="sayt.js">Documentation & Download on Github</a></p>
 	
-		<p><div class="fb-like" data-href="http://drawne.com/demo/sayt.js/" data-send="false" data-layout="button_count" data-width="450" data-show-faces="true"></div></p>
+		<p><a href="https://twitter.com/share" class="twitter-share-button" data-via="someguy9" data-size="large">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></p>
+
     </div>
 
 		<script src="jquery-1.9.1.min.js"></script>

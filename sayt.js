@@ -7,12 +7,21 @@
 (function($) {
 	$.fn.sayt	=	function(options) {
 		
-		// Define default options
+	// Keeps track of the width of the input box in case user resizes browser
+	var resizeTimer;
+	$(window).resize(function() {
+	  clearTimeout(resizeTimer);
+	  resizeTimer = setTimeout(function() {
+	    var getInputWidth = $(this).outerWidth()-2;
+	  }, 200);
+	});
+
+		// Default options
 		var defaults = {
 			inputId: '%-sayt',
 			classPrefix: 'sayt-',
 			noResultsText: 'No results.',
-			inputWidth: $(this).outerWidth()-2,
+			inputWidth: getInputWidth,
 			minChars: 2,
 			showSectionHeadings: false,
 			showDescription: true,
