@@ -1,18 +1,19 @@
 What is sayt.js?
 ================
 
-After seeing Google's search as you type dropdown on ecommerce sites (example lowes.com) using their ecommerce plugins I found it hard to replicate their autocomplete features using current plugins. Most were out dated or made it very hard to mix images in with results including twitter's typeahead. So here's my take on the plugin, here's sayt.js. Perfect for sites that have a built-in search with mixed data. Currently you have to use a json file you produce, so if you want to use external data you'll need to format it into the JSON structure listed below.
+After seeing Google's search as you type dropdown on ecommerce sites (example lowes.com) using their ecommerce plugins I found it hard to replicate their autocomplete features using current plugins. Most were out dated or made it very hard to mix images in with results including twitter's typeahead. So here's my take on the plugin using jQuery, here's sayt.js. Perfect for sites that have a built-in search with mixed data. Currently you have to use a json file you produce, so if you want to use external data you'll need to format it into the JSON structure listed below.
+
+Read my blog post about this plugin [http://drawne.com/blog/search-as-you-type-jquery-plugin-sayt-js/](http://drawne.com/blog/search-as-you-type-jquery-plugin-sayt-js/)
 
 To-do
 =====
 
 - Allow formatting of results to allow external data sources
-- Responsive/mobile support
 
-Example
+[Demo](http://drawne.com/demo/sayt.js "jQuery sayt.js example")
 =======
 
-You can view an example of this script on my site *[here](http://drawne.com/demo/sayt.js "sayt.js example")*.
+You can view an example of this script on my site -> [http://drawne.com/demo/sayt.js](http://drawne.com/demo/sayt.js "jQuery sayt.js example").
 
 Download
 ========
