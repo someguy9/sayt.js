@@ -6,7 +6,8 @@
  
 (function($) {
 	$.fn.sayt	=	function(options) {
-		
+	
+	var getInputWidth = $(this).outerWidth()-2;
 	// Keeps track of the width of the input box in case user resizes browser
 	var resizeTimer;
 	$(window).resize(function() {
