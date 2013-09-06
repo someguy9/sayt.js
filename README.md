@@ -1,3 +1,5 @@
+[![Search as you Type jQuery Demo](http://static.drawne.com/blog/wp-content/uploads/2013/06/search-as-you-type-jquery-plugin.jpg)](http://drawne.com/demo/sayt.js "jQuery sayt.js example")
+
 What is sayt.js?
 ================
 
