@@ -37,7 +37,31 @@
 		
 		//Include default stylesheet
 		if(options.includeCSS) {
-			$('head').append('<link rel="stylesheet" href="sayt.css" type="text/css" />');
+
+		function urlofdoc ( jsfile ) {
+		    var scriptElements = document.getElementsByTagName('script');
+		    var i, element, myfile;
+		 
+		        for( i = 0; element = scriptElements[i]; i++ ) {
+		 
+		            myfile = element.src;
+		 
+		            if( myfile.indexOf( jsfile ) >= 0 ) {
+		                var myurl = myfile.substring( 0, myfile.indexOf( jsfile ) );
+		 
+		            }
+		        }
+		    return myurl;
+		}
+
+		var scripturl = urlofdoc ( "sayt.js" );
+
+		    if (document.createStyleSheet){
+		        document.createStyleSheet(scripturl + 'sayt.css');
+		    }
+		    else {
+		        $('head').append($('<link rel="stylesheet" href="' + scripturl + 'sayt.css" type="text/css" />'));
+		    }
 		}
 		
 		
