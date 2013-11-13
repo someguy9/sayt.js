@@ -53,14 +53,16 @@
 		        }
 		    return myurl;
 		}
-
-		var scripturl = urlofdoc ( "sayt.js" );
+		
+		var scripturl = null;
+		//var scripturl = urlofdoc ( "sayt.js" );
+		//var scripturl = scripturl + "/";
 
 		    if (document.createStyleSheet){
-		        document.createStyleSheet(scripturl + '/sayt.css');
+		        document.createStyleSheet(scripturl + 'sayt.css');
 		    }
 		    else {
-		        $('head').append($('<link rel="stylesheet" href="' + scripturl + '/sayt.css" type="text/css" />'));
+		        $('head').append($('<link rel="stylesheet" href="' + scripturl + 'sayt.css" type="text/css" />'));
 		    }
 		}
 		
