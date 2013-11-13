@@ -54,7 +54,7 @@
 		    return myurl;
 		}
 		
-		var scripturl = null;
+		var scripturl = "";
 		//var scripturl = urlofdoc ( "sayt.js" );
 		//var scripturl = scripturl + "/";
 
