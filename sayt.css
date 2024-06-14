@@ -1,11 +1,11 @@
-.sayt-box{
+.sayt-box {
 	padding: 0;
-	margin: -1px 0 0 0;
+	margin-top: -1px;
 	border: 1px solid #aaa;
-	border-top: 0;
+	border-top: none;
 	list-style: none;
 	text-align: left;
-	box-shadow: 0 5px 10px #999;
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
 	z-index: 9999;
 	font-size: 14px;
 	background-color: #fff;
@@ -13,24 +13,23 @@
 
 .sayt-box:focus {
 	outline: none;
-	outline-color: transparent;
-	outline-style: none;
-	box-shadow: none
+	box-shadow: none;
 }
 
 .sayt-box:hover {
-	display: block!important
+	display: block !important;
 }
 
 .sayt-box .sayt-result.hover, .sayt-box .sayt-result.selected {
-	background-color: #ecf0f1!important;
+	background-color: #ecf0f1 !important;
 }
 
 .sayt-box .sayt-result a {
 	color: #2c3e50;
+	text-decoration: none;
 }
 
-.sayt-box .sayt-result a, .sayt-box .sayt-heading, .sayt-box .sayt-result .no-link{
+.sayt-box .sayt-result a, .sayt-box .sayt-heading, .sayt-box .sayt-result .no-link {
 	padding: 10px;
 	display: block;
 	position: relative;
@@ -45,7 +44,7 @@
 .sayt-box .sayt-result {
 	margin: 0;
 	padding: 0;
-	border-bottom:1px solid #bdc3c7
+	border-bottom: 1px solid #bdc3c7;
 }
 
 .sayt-box .sayt-result tr {
@@ -53,8 +52,8 @@
 }
 
 .sayt-box .sayt-result p.data {
-	margin:0 !important;
-	padding:0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
 }
 
 .sayt-box .sayt-result p.data .title {
@@ -65,12 +64,11 @@
 .sayt-box .sayt-result img.preview {
 	width: 60px;
 	max-height: 60px;
+	object-fit: cover;
 }
 
-@media (min-width: 768px){
-
-	.sayt-box .sayt-result a, .sayt-box .sayt-heading, .sayt-box .sayt-result .no-link{
+@media (min-width: 768px) {
+	.sayt-box .sayt-result a, .sayt-box .sayt-heading, .sayt-box .sayt-result .no-link {
 		padding: 15px 10px;
 	}
-
 }

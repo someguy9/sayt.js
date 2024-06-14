@@ -1,300 +1,233 @@
 /*
- * jQuery Search as you Type plugin
+ * Vanilla JS Search as you Type plugin
  *
  * Website: http://drawne.com
  */
- 
-(function($) {
-	$.fn.sayt	=	function(options) {
-	
-	var getInputWidth = $(this).outerWidth()-2;
-	// Keeps track of the width of the input box in case user resizes browser
-	var resizeTimer;
-	$(window).resize(function() {
-	  clearTimeout(resizeTimer);
-	  resizeTimer = setTimeout(function() {
-	    var getInputWidth = $(this).outerWidth()-2;
-	  }, 200);
-	});
 
-		// Default options
-		var defaults = {
-			inputId: '%-sayt',
-			classPrefix: 'sayt-',
-			noResultsText: 'No results.',
-			inputWidth: getInputWidth,
-			minChars: 2,
-			showSectionHeadings: false,
-			showDescription: true,
-			showImages: true,
-			includeCSS: true,
-			seeAllLink: false
-		};
-		
-		
-		var options = $.extend(defaults, options);
-		
-		
-		//Include default stylesheet
-		if(options.includeCSS) {
+(function() {
+    function sayt(element, options) {
+        var getInputWidth = element.offsetWidth - 2;
+        var resizeTimer;
+        
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                getInputWidth = element.offsetWidth - 2;
+            }, 200);
+        });
 
-		function urlofdoc ( jsfile ) {
-		    var scriptElements = document.getElementsByTagName('script');
-		    var i, element, myfile;
-		 
-		        for( i = 0; element = scriptElements[i]; i++ ) {
-		 
-		            myfile = element.src;
-		 
-		            if( myfile.indexOf( jsfile ) >= 0 ) {
-		                var myurl = myfile.substring( 0, myfile.indexOf( jsfile ) );
-		 
-		            }
-		        }
-		    return myurl;
-		}
-		
-		var scripturl = "";
-		//var scripturl = urlofdoc ( "sayt.js" );
-		//var scripturl = scripturl + "/";
+        var defaults = {
+            inputId: '%-sayt',
+            classPrefix: 'sayt-',
+            noResultsText: 'No results.',
+            inputWidth: getInputWidth,
+            minChars: 2,
+            showSectionHeadings: false,
+            showDescription: true,
+            showImages: true,
+            includeCSS: false,
+            seeAllLink: false
+        };
 
-		    if (document.createStyleSheet){
-		        document.createStyleSheet(scripturl + 'sayt.css');
-		    }
-		    else {
-		        $('head').append($('<link rel="stylesheet" href="' + scripturl + 'sayt.css" type="text/css" />'));
-		    }
-		}
-		
-		
-		options.inputId = options.inputId.replace('%', $(this).attr('id'));
-		
-		
-		var prevQuery = '';
-		var data;
-		
-		
-		$(this).attr('autocomplete', 'off');
-		$(this).after('<ul class="'+options.classPrefix+'box" id="'+options.inputId+'" style="display: none;"></ul>');
-		var input = $(this);
-		var boxObj = $('#'+options.inputId);
-		
-		
-		
-		//Actual function with keyup
-		var timeout = null;
-		var currentRequest = null;
-		var requestCount = 0;
-		input.keyup(function(event) {
-		
-			//only trigger on keystokes
-			if (event.which != 13 && event.which != 9 && event.which != 37 && event.which != 38 && event.which != 39 && event.which != 40){
-			
-				var query = input.val();
-				if(query == "" || query.length < options.minChars) {
-					//do nothing if min value isn't met
-					boxObj.fadeOut(200);
-				}else{
-					
-					prevQuery = query;
-					
-					//Loading animation, great for adding a whirlywiggy
-					input.addClass(options.classPrefix+'thinking');
-				
-					currentRequest = $.ajax({
-						url: options.src+"?query="+query+"&callback=?",
-						crossDomain: true, 
-						contentType: "application/json",
-						dataType: "jsonp",
-						data: {
-							jsonp: "callback"
-						},
-						requestCount: ++requestCount,
-					    success: function(data) {
-							 if (requestCount !== this.requestCount) return;
-							 	
-							 	var output = "";
-							 	
-								var resultsExist = false;
-								$.each(data, function(i, section) {
-									if (section['data'].length > 0)
-									{
-										resultsExist = true;
-									}
-								});
-								
-								if(!resultsExist) {
-								
-								
-								
-								}else{
-								 	
-								 	$.each(data, function(i, section) {
-								 	
-								 		var num = section['section']['num'];
-								 		
-								 		if (num != 0){
-								 		var limit = section['section']['limit'];
-								 		var i = 0;
-								 		
-								 		if (options.showSectionHeadings && section['section']['title'] != undefined) {
-								 			output += '<li class="'+options.classPrefix+'heading">';
-								 			output += section['section']['title'];
-								 			output += '</li>';
-								 		}
-								 	
-								 		$.each(section['data'], function (ii, item) {
-								 		
-								 				if (i < limit) {
-									 				var haslink = (item['url'] != undefined || item['onclick'] != undefined ) ? true : false;
-									 				
-									 				var link = (haslink == true ) ? "<a " : "";
-									 				if (haslink == true ){
-										 				link = "<a "
-										 				if(item['url'] != undefined){
-										 					link += "href='" + item['url'] + "'"
-										 				}
-										 				if(item['onclick'] != undefined){
-										 					link += "onclick='" + item['onclick'] + "'"
-										 				}
-										 				link += ">"
-									 				
-									 				}else{
-										 				link = '<div class="no-link">'
-									 				}
-									 				
-										 			var linkclose = (haslink == true ) ? "</a>" : "</div>";
-										 	
-											 		
-										 			output += '<li class="'+options.classPrefix+'result">' + link;
-										 			output += '<table border="0" cellspacing="0" cellpadding="0" width="100%"><tr>'
-										 			output += (item['image'] != undefined && options.showImages) ? '<td width="68"><img src="'+item['image']+'" class="preview" /></td>' : '';
-										 			output += '<td>';
-										 			output += '<p class="data">';
-										 			output += (item['title'] != undefined) ? '<span class="title">' + item['title'] + '</span><br />\n' : '';
-										 			output += (item['description'] != undefined) ? '<span class="description">' + item['description'] + '</span>' : '';
-										 			output += '</p>';
-										 			output += '</td>';
-										 			output += '</tr></table>';
-										 			output += linkclose;
-										 			output += '</li>';
-									 			
-									 			}
-									 			
-									 			i++;
-								 		})
-								 		
-								 		}
-								 		
-								 	})
-								 	
-								 	//See all link, basically just submits to the form #sticks&stones
-								 	if(options.seeAllLink) {
-									 	
-												output += '<li class="'+options.classPrefix+'result"><a href="javascript:void(0);" onclick="$(this).closest(\'form\').submit();">';
-												output += '<table border="0" cellspacing="0" cellpadding="0" width="100%"><tr>';
-												output += '<td>';
-												output += '<p class="data">';
-												output += '<span class="title">See All Results...</span><br />\n';
-												output += '</p>'+"\n";
-												output += '</td>';
-												output += '</tr></table>';
-												output += '</a></li>'+"\n";
-									 	
-								 	}
-								 	
-								 	
-								 	boxObj.html(output);
-								
-								 	boxObj.css('width', options.inputWidth);
-								 	boxObj.css('position', 'absolute');
-									boxObj.css('top', input.offset().top+input.outerHeight());
-									boxObj.css('left', input.offset().left);
-									
-									//remove thinking class
-									input.removeClass(options.classPrefix+'thinking');
-										 	
-								 	boxObj.fadeIn(200);
-								 	
-								 	
-									// use keyboard for selecting results
-									var current_index = -1,
-										$number_list = $('.'+options.classPrefix+'box'),
-										$options = $number_list.find('.'+options.classPrefix+'result'),
-										items_total = $options.length;
-	
-									$options.hover(function() {
-										$options.removeClass('selected');
-										$(this).addClass('hover selected');
-										current_index = $options.index(this);
-									}, function() {
-										$(this).removeClass('hover selected');
-										current_index = -1;
-									});
-										
-									input.bind('keyup', function(e) {
-										if (e.which == 40) {
-											if (current_index + 1 < items_total) {
-												current_index++;
-												change_selection();
-											}
-											input.val(input.val());
-											e.preventDefault();
-										} else if (e.which == 38) {
-											if (current_index > 0) {
-												current_index--;
-												change_selection();
-											}
-											input.val(input.val());
-											e.preventDefault();
-										} else if (e.which == 13) {
-											if(!$options.eq(current_index).hasClass('hover') && current_index > -1){
-											window.location = $options.eq(current_index).find('a').attr("href");
-											e.preventDefault();
-											};
-										}
-									});
-									
-									function change_selection()
-									{
-										$options.removeClass('selected');
-										$options.removeClass('hover');
-										$options.eq(current_index).addClass('selected');
-									}
-								 	
-								 	
-							 	}
-							 	
-								return;
-					    },
-					    error: function(xhr, textStatus, errorThrown) {
-						},
-							
-						beforeSend : function()
-							{
-								if(currentRequest != null)
-								{
-									currentRequest.abort()
-									//cannont use in a JSONP request
-								}
-							}
-					});	
-					
-				}
-			};
-		});
-		
-		//show last results if input focused again
-		input.focus(function(){
-			if (input.val() == prevQuery && input.val() != '') {
-				boxObj.fadeIn(200);
-			}
-		});
-		
-		//hide search when input if unselected
-		input.blur(function() {
-			boxObj.fadeOut(0);
-		});
-		
-	}
-})(jQuery);
+        options = Object.assign(defaults, options);
+
+        if (options.includeCSS) {
+            const script = document.querySelector('script[src*="sayt.js"]');
+            if (script) {
+                const scriptUrl = script.src.substring(0, script.src.lastIndexOf('/') + 1);
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = `${scriptUrl}sayt.css`;
+                link.type = 'text/css';
+                document.head.appendChild(link);
+            }
+        }
+
+        options.inputId = options.inputId.replace('%', element.id);
+
+        var prevQuery = '';
+
+        element.setAttribute('autocomplete', 'off');
+
+        var boxObj = document.createElement('ul');
+        boxObj.className = options.classPrefix + 'box';
+        boxObj.id = options.inputId;
+        boxObj.style.display = 'none';
+        element.parentNode.insertBefore(boxObj, element.nextSibling);
+
+        var input = element;
+
+        var currentRequest = null;
+
+        input.addEventListener('keyup', function(event) {
+            if (![13, 9, 37, 38, 39, 40].includes(event.which)) {
+                var query = input.value;
+                if (query === "" || query.length < options.minChars) {
+                    boxObj.style.display = 'none';
+                } else {
+                    prevQuery = query;
+                    input.classList.add(options.classPrefix + 'thinking');
+
+                    currentRequest = new AbortController();
+                    const signal = currentRequest.signal;
+
+                    fetch(options.src + "?query=" + query, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        signal: signal
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+
+                        var output = "";
+
+                        var resultsExist = data.some(section => section['data'].length > 0);
+
+                        if (!resultsExist) {
+                            boxObj.style.display = 'none';
+                        } else {
+                            data.forEach(section => {
+                                var num = section['section']['num'];
+                                if (num !== 0) {
+                                    var limit = section['section']['limit'];
+                                    var i = 0;
+
+                                    if (options.showSectionHeadings && section['section']['title']) {
+                                        output += '<li class="' + options.classPrefix + 'heading">';
+                                        output += section['section']['title'];
+                                        output += '</li>';
+                                    }
+
+                                    section['data'].forEach((item, ii) => {
+                                        if (i < limit) {
+                                            var haslink = item['url'] || item['onclick'] ? true : false;
+
+                                            var link = haslink ? "<a " : '<div class="no-link">';
+                                            if (haslink) {
+                                                if (item['url']) {
+                                                    link += "href='" + item['url'] + "' ";
+                                                }
+                                                if (item['onclick']) {
+                                                    link += "onclick='" + item['onclick'] + "' ";
+                                                }
+                                                link += ">";
+                                            }
+
+                                            var linkclose = haslink ? "</a>" : "</div>";
+
+                                            output += '<li class="' + options.classPrefix + 'result">' + link;
+                                            output += '<table border="0" cellspacing="0" cellpadding="0" width="100%"><tr>';
+                                            if (item['image'] && options.showImages) {
+                                                output += '<td width="68"><img src="' + item['image'] + '" class="preview" /></td>';
+                                            }
+                                            output += '<td>';
+                                            output += '<p class="data">';
+                                            if (item['title']) {
+                                                output += '<span class="title">' + item['title'] + '</span><br />';
+                                            }
+                                            if (item['description']) {
+                                                output += '<span class="description">' + item['description'] + '</span>';
+                                            }
+                                            output += '</p>';
+                                            output += '</td>';
+                                            output += '</tr></table>';
+                                            output += linkclose;
+                                            output += '</li>';
+                                        }
+                                        i++;
+                                    });
+                                }
+                            });
+
+                            if (options.seeAllLink) {
+                                output += '<li class="' + options.classPrefix + 'result"><a href="javascript:void(0);" onclick="this.closest(\'form\').submit();">';
+                                output += '<table border="0" cellspacing="0" cellpadding="0" width="100%"><tr>';
+                                output += '<td>';
+                                output += '<p class="data">';
+                                output += '<span class="title">See All Results...</span><br />';
+                                output += '</p>';
+                                output += '</td>';
+                                output += '</tr></table>';
+                                output += '</a></li>';
+                            }
+
+                            boxObj.innerHTML = output;
+                            boxObj.style.width = options.inputWidth + 'px';
+                            boxObj.style.position = 'absolute';
+                            boxObj.style.top = (input.offsetTop + input.offsetHeight) + 'px';
+                            boxObj.style.left = input.offsetLeft + 'px';
+
+                            input.classList.remove(options.classPrefix + 'thinking');
+                            boxObj.style.display = 'block';
+
+                            var current_index = -1;
+                            var $options = boxObj.querySelectorAll('.' + options.classPrefix + 'result');
+                            var items_total = $options.length;
+
+                            $options.forEach(function(option, index) {
+                                option.addEventListener('mouseover', function() {
+                                    $options.forEach(opt => opt.classList.remove('selected'));
+                                    option.classList.add('hover', 'selected');
+                                    current_index = index;
+                                });
+
+                                option.addEventListener('mouseout', function() {
+                                    option.classList.remove('hover', 'selected');
+                                    current_index = -1;
+                                });
+                            });
+
+                            input.addEventListener('keyup', function(e) {
+                                if (e.which == 40) {
+                                    if (current_index + 1 < items_total) {
+                                        current_index++;
+                                        change_selection();
+                                    }
+                                    e.preventDefault();
+                                } else if (e.which == 38) {
+                                    if (current_index > 0) {
+                                        current_index--;
+                                        change_selection();
+                                    }
+                                    e.preventDefault();
+                                } else if (e.which == 13) {
+                                    if (!$options[current_index].classList.contains('hover') && current_index > -1) {
+                                        window.location = $options[current_index].querySelector('a').href;
+                                        e.preventDefault();
+                                    }
+                                }
+                            });
+
+                            function change_selection() {
+                                $options.forEach(opt => opt.classList.remove('selected', 'hover'));
+                                $options[current_index].classList.add('selected');
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                    });
+                }
+            }
+        });
+
+        input.addEventListener('focus', function() {
+            if (input.value === prevQuery && input.value !== '') {
+                boxObj.style.display = 'block';
+            }
+        });
+
+        input.addEventListener('blur', function() {
+            boxObj.style.display = 'none';
+        });
+    }
+
+    window.sayt = sayt;
+})();

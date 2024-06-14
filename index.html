@@ -1,13 +1,10 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>sayt.js - jQuery Plugin for Searching as you Type</title>
-        <meta name="description" content="Demo for sayt.js a jQuery plugin for showing search results as you type.">
+        <title>sayt.js - Javascript plugin for Searching as you Type</title>
+        <meta name="description" content="Demo for sayt.js a javascript plugin for showing search results as you type.">
         <meta name="viewport" content="width=device-width">
         
         <style>
@@ -24,52 +21,25 @@
         </style>
     </head>
     <body>
-
-        <!--[if lt IE 7]>
-            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-        <![endif]-->
-
        
     <div class="content">
-    	<a href="https://github.com/someguy9/sayt.js" title="sayt.js"><img src="sayt-logo.png" alt="sayt.js" border="0" /></a>
-	    <p class="slogan">a jQuery plugin for searching as you type</p>
+    	<a href="https://github.com/someguy9/sayt.js" title="sayt.js"><img src="sayt-logo.svg" alt="sayt.js logo"/></a>
+	    <p class="slogan">a Javascript plugin for searching as you type</p>
 	    <form action="" method="get">
 			<input class="search-box" name="query" id="example-box" size="48" placeholder="Type a country for example..." />
 		</form>
 		<p><a href="https://github.com/someguy9/sayt.js" title="sayt.js">Documentation & Download on Github</a></p>
-	
-		<p><a href="https://twitter.com/share" class="twitter-share-button" data-via="someguy9" data-size="large">Tweet</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></p>
 
+    	<p>Enjoy this script? <a href="https://buymeacoffee.com/someguy" title="Donate">Buy me a coffee</a></p>
     </div>
-
-		<script src="jquery-1.9.1.min.js"></script>
 		<script src="sayt.js"></script>
 		
 		<script>
-		$(document).ready(function() {
-		  $('.search-box').sayt({
-		    src: 'sayt-json.php',
-		    showSectionHeadings: true
-		  });
+		sayt( document.querySelector('.search-box'), {
+			src: 'https://drawne.com/demo/sayt.js/sayt-json.php',
+			showSectionHeadings: true,
+			includeCSS: true
 		});
 		</script>
-		
-		<!-- a little plug for my site :) -->
-		<script src="http://static.drawne.com/avf-watermark.js"></script>
-		
-		<!-- tracking for the demo on my site -->
-		<script type="text/javascript">
-		var clicky_site_ids = clicky_site_ids || [];
-		clicky_site_ids.push(66458773);
-		(function() {
-		  var s = document.createElement('script');
-		  s.type = 'text/javascript';
-		  s.async = true;
-		  s.src = '//static.getclicky.com/js';
-		  ( document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild( s );
-		})();
-		</script>
-		<noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/66458773ns.gif" /></p></noscript>
     </body>
 </html>
