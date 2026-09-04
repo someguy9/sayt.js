@@ -1,233 +1,292 @@
 /*
- * Vanilla JS Search as you Type plugin
+ * sayt.js - dependency-free search-as-you-type
  *
- * Website: http://drawne.com
+ * https://github.com/someguy9/sayt.js
  */
 
-(function() {
-    function sayt(element, options) {
-        var getInputWidth = element.offsetWidth - 2;
-        var resizeTimer;
-        
-        window.addEventListener('resize', function() {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(function() {
-                getInputWidth = element.offsetWidth - 2;
-            }, 200);
-        });
+(function (root, factory) {
+    if (typeof module === 'object' && module.exports) {
+        module.exports = factory();
+    } else {
+        root.sayt = factory();
+    }
+}(typeof self !== 'undefined' ? self : this, function () {
+    // Escape a value for a double-quoted HTML attribute (href, src, onclick).
+    // Titles and descriptions are deliberately inserted as HTML so a data source
+    // can highlight matches etc.; it must escape any user-supplied text itself.
+    function attr(value) {
+        return String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    }
 
-        var defaults = {
+    function sayt(input, options) {
+        options = Object.assign({
+            src: null,
             inputId: '%-sayt',
             classPrefix: 'sayt-',
             noResultsText: 'No results.',
-            inputWidth: getInputWidth,
+            inputWidth: null,
             minChars: 2,
+            delay: 150,
             showSectionHeadings: false,
             showDescription: true,
             showImages: true,
             includeCSS: false,
             seeAllLink: false
-        };
+        }, options);
 
-        options = Object.assign(defaults, options);
+        const cls = (name) => options.classPrefix + name;
 
         if (options.includeCSS) {
             const script = document.querySelector('script[src*="sayt.js"]');
             if (script) {
-                const scriptUrl = script.src.substring(0, script.src.lastIndexOf('/') + 1);
                 const link = document.createElement('link');
                 link.rel = 'stylesheet';
-                link.href = `${scriptUrl}sayt.css`;
-                link.type = 'text/css';
+                link.href = new URL('sayt.css', script.src).href;
                 document.head.appendChild(link);
             }
         }
 
-        options.inputId = options.inputId.replace('%', element.id);
+        const box = document.createElement('ul');
+        box.className = cls('box');
+        box.id = options.inputId.replace('%', input.id);
+        box.style.display = 'none';
+        box.style.position = 'absolute';
+        box.setAttribute('role', 'listbox');
+        box.setAttribute('aria-label', 'Search results');
+        input.insertAdjacentElement('afterend', box);
 
-        var prevQuery = '';
+        // ARIA combobox wiring so screen readers announce the popup and the
+        // active option as the user types and arrows through results.
+        input.setAttribute('autocomplete', 'off');
+        input.setAttribute('role', 'combobox');
+        input.setAttribute('aria-autocomplete', 'list');
+        input.setAttribute('aria-haspopup', 'listbox');
+        input.setAttribute('aria-expanded', 'false');
+        input.setAttribute('aria-controls', box.id);
 
-        element.setAttribute('autocomplete', 'off');
+        let prevQuery = '';   // query that produced the current box contents
+        let timer = null;     // debounce timer
+        let controller = null;
+        let seq = 0;          // bumped per search; stale responses are dropped
+        let items = [];       // rendered result <li>s
+        let index = -1;       // keyboard-selected item
 
-        var boxObj = document.createElement('ul');
-        boxObj.className = options.classPrefix + 'box';
-        boxObj.id = options.inputId;
-        boxObj.style.display = 'none';
-        element.parentNode.insertBefore(boxObj, element.nextSibling);
+        function isOpen() {
+            return box.style.display !== 'none';
+        }
 
-        var input = element;
+        function positionBox() {
+            const width = options.inputWidth != null ? options.inputWidth : input.offsetWidth;
+            box.style.width = width + 'px';
+            box.style.top = (input.offsetTop + input.offsetHeight) + 'px';
+            box.style.left = input.offsetLeft + 'px';
+        }
 
-        var currentRequest = null;
+        function show() {
+            positionBox();
+            box.style.display = 'block';
+            input.setAttribute('aria-expanded', 'true');
+        }
 
-        input.addEventListener('keyup', function(event) {
-            if (![13, 9, 37, 38, 39, 40].includes(event.which)) {
-                var query = input.value;
-                if (query === "" || query.length < options.minChars) {
-                    boxObj.style.display = 'none';
-                } else {
+        function hide() {
+            box.style.display = 'none';
+            input.setAttribute('aria-expanded', 'false');
+            select(-1);
+        }
+
+        function select(i) {
+            index = i;
+            items.forEach((item, n) => {
+                item.classList.toggle('selected', n === i);
+                item.setAttribute('aria-selected', n === i ? 'true' : 'false');
+            });
+            if (items[i]) {
+                input.setAttribute('aria-activedescendant', items[i].id);
+            } else {
+                input.removeAttribute('aria-activedescendant');
+            }
+        }
+
+        function renderItem(item) {
+            const linked = item.url || item.onclick;
+            let html = linked ? '<a' : '<div class="no-link"';
+            if (item.url) {
+                html += ' href="' + attr(item.url) + '"';
+            }
+            if (item.onclick) {
+                html += ' onclick="' + attr(item.onclick) + '"';
+            }
+            html += '>';
+            if (item.image && options.showImages) {
+                html += '<img class="preview" src="' + attr(item.image) + '" alt="">';
+            }
+            html += '<div class="data">';
+            if (item.title) {
+                html += '<span class="title">' + item.title + '</span>';
+            }
+            if (item.description && options.showDescription) {
+                html += '<span class="description">' + item.description + '</span>';
+            }
+            html += '</div>';
+            html += linked ? '</a>' : '</div>';
+            return '<li class="' + cls('result') + '" role="option">' + html + '</li>';
+        }
+
+        function render(data) {
+            const sections = data.filter((s) => s.data && s.data.length > 0);
+            let html = '';
+
+            if (sections.length === 0) {
+                html = '<li class="' + cls('noresults') + '" role="option" aria-disabled="true">' + options.noResultsText + '</li>';
+            } else {
+                sections.forEach((s) => {
+                    const section = s.section || {};
+                    if (options.showSectionHeadings && section.title) {
+                        html += '<li class="' + cls('heading') + '" role="presentation">' + section.title + '</li>';
+                    }
+                    html += s.data.slice(0, section.limit || s.data.length).map(renderItem).join('');
+                });
+                if (options.seeAllLink) {
+                    html += '<li class="' + cls('result') + '" role="option">' +
+                        '<a href="#" data-sayt-see-all><div class="data"><span class="title">See All Results...</span></div></a></li>';
+                }
+            }
+
+            box.innerHTML = html;
+            items = Array.from(box.querySelectorAll('.' + cls('result')));
+            items.forEach((item, n) => {
+                item.id = box.id + '-opt-' + n;
+                item.setAttribute('aria-selected', 'false');
+            });
+            index = -1;
+
+            // Don't pop open under a user who has already tabbed away; refocusing
+            // the input shows the results instead (see the focus handler).
+            if (document.activeElement === input) {
+                show();
+            }
+        }
+
+        // options.src is either a URL (fetched as GET src?query=...) or a
+        // function returning the sections array, or a Promise resolving to it.
+        function fetchResults(query, signal) {
+            if (typeof options.src === 'function') {
+                return Promise.resolve().then(() => options.src(query));
+            }
+            const url = new URL(options.src, window.location.href);
+            url.searchParams.set('query', query);
+            return fetch(url, { signal }).then((response) => {
+                if (!response.ok) {
+                    throw new Error('sayt: ' + response.status + ' ' + response.statusText);
+                }
+                return response.json();
+            });
+        }
+
+        function cancel() {
+            clearTimeout(timer);
+            seq++;
+            if (controller) {
+                controller.abort();
+                controller = null;
+            }
+            input.classList.remove(cls('thinking'));
+        }
+
+        function search(query) {
+            cancel();
+            const mySeq = seq;
+            controller = new AbortController();
+            input.classList.add(cls('thinking'));
+
+            fetchResults(query, controller.signal)
+                .then((data) => {
+                    if (mySeq !== seq) {
+                        return; // superseded by a newer query
+                    }
+                    input.classList.remove(cls('thinking'));
                     prevQuery = query;
-                    input.classList.add(options.classPrefix + 'thinking');
+                    render(data);
+                })
+                .catch((error) => {
+                    if (mySeq !== seq) {
+                        return; // aborted or superseded
+                    }
+                    input.classList.remove(cls('thinking'));
+                    console.error('sayt:', error);
+                });
+        }
 
-                    currentRequest = new AbortController();
-                    const signal = currentRequest.signal;
+        // `input` rather than keyup so paste, cut, IME and autofill all search.
+        input.addEventListener('input', () => {
+            const query = input.value;
+            cancel();
+            if (query.length < options.minChars) {
+                hide();
+            } else {
+                timer = setTimeout(() => search(query), options.delay);
+            }
+        });
 
-                    fetch(options.src + "?query=" + query, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        signal: signal
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-
-                        var output = "";
-
-                        var resultsExist = data.some(section => section['data'].length > 0);
-
-                        if (!resultsExist) {
-                            boxObj.style.display = 'none';
-                        } else {
-                            data.forEach(section => {
-                                var num = section['section']['num'];
-                                if (num !== 0) {
-                                    var limit = section['section']['limit'];
-                                    var i = 0;
-
-                                    if (options.showSectionHeadings && section['section']['title']) {
-                                        output += '<li class="' + options.classPrefix + 'heading">';
-                                        output += section['section']['title'];
-                                        output += '</li>';
-                                    }
-
-                                    section['data'].forEach((item, ii) => {
-                                        if (i < limit) {
-                                            var haslink = item['url'] || item['onclick'] ? true : false;
-
-                                            var link = haslink ? "<a " : '<div class="no-link">';
-                                            if (haslink) {
-                                                if (item['url']) {
-                                                    link += "href='" + item['url'] + "' ";
-                                                }
-                                                if (item['onclick']) {
-                                                    link += "onclick='" + item['onclick'] + "' ";
-                                                }
-                                                link += ">";
-                                            }
-
-                                            var linkclose = haslink ? "</a>" : "</div>";
-
-                                            output += '<li class="' + options.classPrefix + 'result">' + link;
-                                            output += '<table border="0" cellspacing="0" cellpadding="0" width="100%"><tr>';
-                                            if (item['image'] && options.showImages) {
-                                                output += '<td width="68"><img src="' + item['image'] + '" class="preview" /></td>';
-                                            }
-                                            output += '<td>';
-                                            output += '<p class="data">';
-                                            if (item['title']) {
-                                                output += '<span class="title">' + item['title'] + '</span><br />';
-                                            }
-                                            if (item['description']) {
-                                                output += '<span class="description">' + item['description'] + '</span>';
-                                            }
-                                            output += '</p>';
-                                            output += '</td>';
-                                            output += '</tr></table>';
-                                            output += linkclose;
-                                            output += '</li>';
-                                        }
-                                        i++;
-                                    });
-                                }
-                            });
-
-                            if (options.seeAllLink) {
-                                output += '<li class="' + options.classPrefix + 'result"><a href="javascript:void(0);" onclick="this.closest(\'form\').submit();">';
-                                output += '<table border="0" cellspacing="0" cellpadding="0" width="100%"><tr>';
-                                output += '<td>';
-                                output += '<p class="data">';
-                                output += '<span class="title">See All Results...</span><br />';
-                                output += '</p>';
-                                output += '</td>';
-                                output += '</tr></table>';
-                                output += '</a></li>';
-                            }
-
-                            boxObj.innerHTML = output;
-                            boxObj.style.width = options.inputWidth + 'px';
-                            boxObj.style.position = 'absolute';
-                            boxObj.style.top = (input.offsetTop + input.offsetHeight) + 'px';
-                            boxObj.style.left = input.offsetLeft + 'px';
-
-                            input.classList.remove(options.classPrefix + 'thinking');
-                            boxObj.style.display = 'block';
-
-                            var current_index = -1;
-                            var $options = boxObj.querySelectorAll('.' + options.classPrefix + 'result');
-                            var items_total = $options.length;
-
-                            $options.forEach(function(option, index) {
-                                option.addEventListener('mouseover', function() {
-                                    $options.forEach(opt => opt.classList.remove('selected'));
-                                    option.classList.add('hover', 'selected');
-                                    current_index = index;
-                                });
-
-                                option.addEventListener('mouseout', function() {
-                                    option.classList.remove('hover', 'selected');
-                                    current_index = -1;
-                                });
-                            });
-
-                            input.addEventListener('keyup', function(e) {
-                                if (e.which == 40) {
-                                    if (current_index + 1 < items_total) {
-                                        current_index++;
-                                        change_selection();
-                                    }
-                                    e.preventDefault();
-                                } else if (e.which == 38) {
-                                    if (current_index > 0) {
-                                        current_index--;
-                                        change_selection();
-                                    }
-                                    e.preventDefault();
-                                } else if (e.which == 13) {
-                                    if (!$options[current_index].classList.contains('hover') && current_index > -1) {
-                                        window.location = $options[current_index].querySelector('a').href;
-                                        e.preventDefault();
-                                    }
-                                }
-                            });
-
-                            function change_selection() {
-                                $options.forEach(opt => opt.classList.remove('selected', 'hover'));
-                                $options[current_index].classList.add('selected');
-                            }
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Fetch error:', error);
-                    });
+        // keydown rather than keyup so preventDefault() can stop the caret
+        // jumping and the surrounding form submitting when Enter picks a result.
+        input.addEventListener('keydown', (e) => {
+            if (!isOpen()) {
+                return;
+            }
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (index + 1 < items.length) {
+                    select(index + 1);
+                }
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (index > -1) {
+                    select(index - 1);
+                }
+            } else if (e.key === 'Escape') {
+                e.preventDefault();
+                hide();
+            } else if (e.key === 'Enter' && items[index]) {
+                const link = items[index].querySelector('a');
+                if (link) {
+                    e.preventDefault();
+                    link.click();
                 }
             }
         });
 
-        input.addEventListener('focus', function() {
-            if (input.value === prevQuery && input.value !== '') {
-                boxObj.style.display = 'block';
+        // Keep the input focused while clicking inside the box; otherwise blur
+        // would hide it before the click lands on a result.
+        box.addEventListener('mousedown', (e) => e.preventDefault());
+
+        // Pointing at a row takes over from keyboard selection (the :hover CSS
+        // highlights it), so Enter falls through to the form as usual.
+        box.addEventListener('mouseover', () => select(-1));
+
+        box.addEventListener('click', (e) => {
+            if (e.target.closest('[data-sayt-see-all]')) {
+                e.preventDefault();
+                if (input.form) {
+                    input.form.requestSubmit();
+                }
             }
         });
 
-        input.addEventListener('blur', function() {
-            boxObj.style.display = 'none';
+        input.addEventListener('focus', () => {
+            if (input.value !== '' && input.value === prevQuery) {
+                show();
+            }
+        });
+
+        input.addEventListener('blur', hide);
+
+        window.addEventListener('resize', () => {
+            if (isOpen()) {
+                positionBox();
+            }
         });
     }
 
-    window.sayt = sayt;
-})();
+    return sayt;
+}));

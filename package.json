@@ -1,0 +1,40 @@
+{
+  "name": "sayt.js",
+  "version": "1.0.0",
+  "description": "Dependency-free vanilla JavaScript search-as-you-type / autocomplete plugin with sections, images, descriptions, links, and keyboard navigation.",
+  "main": "sayt.js",
+  "style": "sayt.css",
+  "files": [
+    "sayt.js",
+    "sayt.css",
+    "demo-data.js",
+    "sayt-json.php",
+    "examples",
+    "MIT-LICENSE.txt",
+    "README.md"
+  ],
+  "scripts": {
+    "demo": "python3 -m http.server 8765"
+  },
+  "keywords": [
+    "search-as-you-type",
+    "autocomplete",
+    "typeahead",
+    "instant-search",
+    "search",
+    "dropdown",
+    "vanilla-js",
+    "no-dependencies",
+    "sayt"
+  ],
+  "author": "Andy Feliciotti",
+  "license": "MIT",
+  "homepage": "https://github.com/someguy9/sayt.js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/someguy9/sayt.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/someguy9/sayt.js/issues"
+  }
+}
