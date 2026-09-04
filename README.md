@@ -10,13 +10,15 @@ No dependencies — just `sayt.js` and `sayt.css`.
 Demo
 ====
 
-The repo ships a self-contained demo in [index.html](index.html) — it filters a local country list via [demo-data.js](demo-data.js), so it needs no backend. Run it locally:
+**[Try the live demo →](https://someguy9.github.io/sayt.js/)**
+
+That page is [index.html](index.html) straight from this repo — it filters a local country list via [demo-data.js](demo-data.js), so it needs no backend and any static host (GitHub Pages here) can serve it as-is. Run the same thing locally:
 
 ```bash
 npm run demo   # or: python3 -m http.server 8765
 ```
 
-then open <http://localhost:8765>. Since it has no server dependency, the same files can be published as-is to any static host such as GitHub Pages.
+then open <http://localhost:8765>.
 
 Install
 =======
